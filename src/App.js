@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Home from './routes/Home';
+import Navbar from './Component/Navbar';
+import Movies from './routes/Movies';
+import Footer from './Component/Footer';
+import { useState } from 'react';
+import Detailmovies from './Component/Detailmovies';
 
 function App() {
+  const [filter, setFilter] = useState();
+  // const [popularMovies, setPopularMovies] = useState([]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Navbar setFil={setFilter} />
+      <Routes>
+        <Route path='/' element={<Home />} />
+
+        <Route path='/movies' element={<Movies fil={filter} />} />
+        <Route path='/movies/:id' element={<Detailmovies />} />
+        <Route />
+
+        <Route path='/filter' />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   );
 }
 
