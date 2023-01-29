@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useEffect } from 'react'
 // import Detailmovies from '../Component/Detailmovies'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
-export default function Movies({fil, setpop}) {
-    
+export default function Movies({fil, hasilCari}) {
 
     const [popularMovies, setPopularMovies] = useState([]);
     const getmovieList = async () => {
@@ -35,7 +34,15 @@ export default function Movies({fil, setpop}) {
                 setPopularMovies(results);
             })
         }
-    }, [fil])
+
+        const search = async () => {
+            if (hasilCari.length > 1) {
+                const search = await axios.get(`${process.env.REACT_APP_BASEURL}/search/movie?query=${hasilCari}&page=1&api_key=${process.env.REACT_APP_APIKEY}`);
+                setPopularMovies(search.data.results)
+            }
+        }
+        search();
+    }, [fil, hasilCari])
 
 
     // console.log("ini data", popularMovies)
@@ -62,16 +69,16 @@ export default function Movies({fil, setpop}) {
                     <p className='text-[10px] lg:text-xs'>Release: {movie.release_date}</p>
                 </div>
             {/* <Button movie={movie}/> */}
-            <Link to={'/movies/'+movie.id} className='inline-flex items-center absolute bottom-3 right-3 px-2 p-1 text-[10px] lg:text-xs font-normal lg:font-medium text-center text-white bg-blue-700 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-blue-300'>View Detail</Link>
+            <a href={'/movies/'+movie.id} className='inline-flex items-center absolute bottom-3 right-3 px-2 p-1 text-[10px] lg:text-xs font-normal lg:font-medium text-center text-white bg-blue-700 rounded-md hover:bg-blue-800 focus:outline-none focus:ring-blue-300'>View Detail</a>
             </div>
             )
         })
     }
     
   return (
-    <div className='p-16 bg-gray-900 h-[100%]'>
+    <div className='pt-32 pr-16 pl-16 pb-16 bg-gray-900 h-[100%]'>
         <div className='grid text-white'>
-            <span className='text-md font-semibold'>Movies by : {fil}</span>
+            <span className='text-md font-bold'>Movies by : <span className='text-orange-400 ml-2'>{fil}</span></span>
             <span className='border rounded-full border-white w-full mt-2 opacity-50'></span>
         </div>
         <div className='flex flex-wrap justify-center lg:justify-start-end gap-6 mt-16'>
